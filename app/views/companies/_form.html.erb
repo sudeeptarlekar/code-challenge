@@ -53,7 +53,7 @@
       </div>
       <div class="col-lg offset-lg-1">
         <div class="form-group">
-          <%= f.text_field :email, class: "form-control", placeholder: "hello@company.com"%>
+          <%= f.text_field :email, class: "form-control", placeholder: "hello@company.com", pattern: "[a-zA-Z0-9.-]+@getmainstreet\.com", title: 'invalid email' %>
         </div>
       </div>
     </div>

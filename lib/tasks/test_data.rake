@@ -1,14 +1,15 @@
 namespace :test_data do
 
-
   desc "add test rich text blocks"
-  task :rich_texts => :environment do
-    add_rich_text_to_companies
+  task :update_desc_and_address => :environment do
+    update_companies
   end
 
-  def add_rich_text_to_companies
+  def update_companies
     Company.all.each do |company|
       add_rich_text_to_company(company)
+      update_address(company)
+      company.save(validate: false)
     end
   end
 
@@ -21,7 +22,13 @@ namespace :test_data do
                       <li>You should hire #{company.name} and nobody else</li>
                      </ul>
                      <p>We focus on providing you with a written detailed estimate for your painting making sure that you know there are no hidden costs. We also like to give you different options that meet your budget needs. Following our first visit, we help you with painting colors and setting up an upcoming date for your project.</p>"
-    company.save
   end
 
+  def update_address(company)
+    return unless company.zip_code.present?
+
+    address = ZipCodes.identify(company.zip_code)
+    company.state_name = address[:state_name]
+    company.city = address[:city]
+  end
 end
